@@ -1,20 +1,54 @@
 package com.example.giris.drdroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.devspark.robototextview.widget.RobotoTextView;
+import com.example.giris.drdroid.fragments.diagnosefragments.SymptomFragment;
+import com.rey.material.widget.Button;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static final String MY_PREFS_NAME = "Login Credentials";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        startActivity(new Intent(this, NavActivity.class));
-        finish();
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+
+        if(prefs.contains("firstname"))
+        {
+            startActivity(new Intent(LoginActivity.this, NavActivity.class));
+            finish();
+        }
+
+        Button button = (Button) findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                //TODO: add network call
+            }
+        });
+
+        RobotoTextView tv = (RobotoTextView) findViewById(R.id.register);
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                finish();
+
+            }
+        });
+
     }
 
     @Override

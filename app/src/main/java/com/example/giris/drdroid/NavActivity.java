@@ -1,5 +1,6 @@
 package com.example.giris.drdroid;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.giris.drdroid.fragments.AboutFragment;
 import com.example.giris.drdroid.fragments.DiagnoseFragment;
@@ -20,6 +22,8 @@ import com.example.giris.drdroid.fragments.FindDoctorsFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final String MY_PREFS_NAME = "Login Credentials";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,11 @@ public class NavActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             //fragment = new TODO();
             setTitle("Log Out");
+            SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+            editor.clear();
+            editor.commit();
+            Toast.makeText(NavActivity.this, "Logged out.", Toast.LENGTH_SHORT).show();
+
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
 

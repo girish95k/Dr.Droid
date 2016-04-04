@@ -81,7 +81,8 @@
                 android:background="@color/cpb_blue"
                 android:text="NEXT"
                 android:layout_below="@+id/age"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

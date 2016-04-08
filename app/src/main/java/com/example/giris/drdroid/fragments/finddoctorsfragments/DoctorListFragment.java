@@ -80,7 +80,7 @@ public class DoctorListFragment extends Fragment {
         data.add(new DoctorListModel("Ram Mohan Shenoy", "AECS Layout", "Near CMRIT", "4.5", "Heart"));
         data.add(new DoctorListModel("Jagan Shankar Reddy", "Mahadevapura", "Near Phoenix Mall", "3.0", "Heart"));
         data.add(new DoctorListModel("Shyam Ashok Dellwala", "Garudacharpalya", "Near Brigade Metropolis", "4.5", "Heart"));
-        adapter = new DoctorListAdapter(data);
+        adapter = new DoctorListAdapter(data, getActivity());
         recyclerView.setAdapter(adapter);
 
         return rootView;

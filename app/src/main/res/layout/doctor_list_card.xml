@@ -65,6 +65,18 @@
                 android:text="Select the criticality of your complaint"
                 android:textColor="#666"
                 android:textSize="15dp" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/cpb_blue"
+                android:text="BOOK APPOINTMENT"
+                android:layout_below="@+id/book"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20dp"
+                android:textColor="#ffffff"
+                />
             <!--
 
             <LinearLayout

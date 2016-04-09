@@ -1,14 +1,23 @@
 package com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.bookappointmentfragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.giris.drdroid.R;
+import com.example.giris.drdroid.fragments.finddoctorsfragments.adapters.SlotListAdapter;
+import com.example.giris.drdroid.fragments.finddoctorsfragments.data.SlotListModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +32,13 @@ public class BookFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public static View.OnClickListener myOnClickListener;
+    private static RecyclerView recyclerView;
+    private static ArrayList<SlotListModel> data;
+    private static RecyclerView.Adapter adapter;
+    private static ArrayList<Integer> removedItems;
+    private RecyclerView.LayoutManager layoutManager;
+    //private OnFragmentInteractionListener mListener;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -65,7 +80,31 @@ public class BookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_book, container, false);
+        // Inflate the layout for this fragment
+
+        myOnClickListener = new MyOnClickListener(getActivity());
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        recyclerView.setHasFixedSize(false);
+
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        data = new ArrayList<SlotListModel>();
+
+        data.add(new SlotListModel("1:30"));
+        data.add(new SlotListModel("2:00"));
+        data.add(new SlotListModel("2:30"));
+        data.add(new SlotListModel("3:00"));
+        data.add(new SlotListModel("3:30"));
+        data.add(new SlotListModel("4:30"));
+        adapter = new SlotListAdapter(data, getActivity());
+        recyclerView.setAdapter(adapter);
+
+        return rootView;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -90,6 +129,30 @@ public class BookFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+    private static class MyOnClickListener implements View.OnClickListener {
+
+        private final Context context;
+
+        public MyOnClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int selectedItemPosition = recyclerView.getChildLayoutPosition(v);
+            RecyclerView.ViewHolder viewHolder
+                    = recyclerView.findViewHolderForLayoutPosition(selectedItemPosition);
+            LinearLayout hiddenLayout
+                    = (LinearLayout) viewHolder.itemView.findViewById(R.id.frame_expand);
+            if(hiddenLayout.getVisibility() == View.VISIBLE) {
+                hiddenLayout.setVisibility(View.GONE);
+            }
+            else {
+                hiddenLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     /**

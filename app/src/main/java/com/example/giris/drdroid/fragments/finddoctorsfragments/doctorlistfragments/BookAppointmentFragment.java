@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.giris.drdroid.R;
-import com.example.giris.drdroid.fragments.finddoctorsfragments.DoctorListFragment;
-import com.example.giris.drdroid.fragments.finddoctorsfragments.DoctorMapFragment;
 import com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.bookappointmentfragments.BookFragment;
 import com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.bookappointmentfragments.ReviewsFragment;
 

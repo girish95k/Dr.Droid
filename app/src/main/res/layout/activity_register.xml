@@ -36,19 +36,20 @@
                 android:inputType="text"
                 android:layout_centerHorizontal="true" />
             <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/lastname"
+                android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_below="@+id/firstname"
-                android:hint="Last Name"
+                android:hint="Phone"
                 android:padding="10dp"
                 app:met_baseColor="@color/cpb_blue"
                 app:met_primaryColor="@color/cpb_blue"
                 app:met_errorColor="#ddaa00"
                 app:met_floatingLabel="highlight"
-                android:inputType="text"
+                android:inputType="number"
                 android:layout_centerHorizontal="true" />
+            <!--
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/age"
                 android:layout_width="match_parent"
@@ -63,12 +64,24 @@
                 app:met_floatingLabel="highlight"
                 android:inputType="number"
                 android:layout_centerHorizontal="true" />
+            -->
+            <com.rey.material.widget.Button
+                android:id="@+id/dateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/cpb_blue"
+                android:text="Date of Birth"
+                android:padding="10dp"
+                android:layout_below="@+id/phone"
+                android:textColor="#ffffff"
+                android:layout_centerHorizontal="true" />
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_below="@+id/age"
+                android:layout_below="@+id/dateButton"
                 android:hint="Email Address"
                 android:padding="10dp"
                 app:met_baseColor="@color/cpb_blue"

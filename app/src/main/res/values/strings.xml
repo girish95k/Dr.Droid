@@ -22,4 +22,5 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_book_appointment">BookAppointmentActivity</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_url">URLActivity</string>
 </resources>

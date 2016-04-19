@@ -1,14 +1,20 @@
 package com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.bookappointmentfragments;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.giris.drdroid.NavActivity;
 import com.example.giris.drdroid.R;
+import com.rey.material.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +71,37 @@ public class BookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_book, container, false);
+
+        final String arr[] = {"1:30-230", "2:30-3:00"};
+
+        final View root = inflater.inflate(R.layout.fragment_book, container, false);
+
+        Button button = (Button) root.findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                new MaterialDialog.Builder(getActivity())
+                        .title("Available Slots")
+                        .items(arr)
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                /**
+                                 * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                                 * returning false here won't allow the newly selected radio button to actually be selected.
+                                 **/
+                                return true;
+                            }
+                        })
+                        .positiveText("Submit")
+                        .show();
+
+            }
+        });
+
+
+        return root;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

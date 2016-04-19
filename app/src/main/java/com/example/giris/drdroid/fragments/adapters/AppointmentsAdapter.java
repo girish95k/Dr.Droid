@@ -1,4 +1,4 @@
-package com.example.giris.drdroid.fragments.finddoctorsfragments.adapters;
+package com.example.giris.drdroid.fragments.adapters;
 
 /**
  * Created by giris on 27-03-2016.
@@ -16,23 +16,20 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.example.giris.drdroid.R;
-import com.example.giris.drdroid.fragments.diagnosefragments.SymptomFragment;
-import com.example.giris.drdroid.fragments.finddoctorsfragments.DoctorListFragment;
-import com.example.giris.drdroid.fragments.finddoctorsfragments.data.DoctorListModel;
-import com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.BookAppointmentActivity;
-import com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.BookAppointmentFragment;
+import com.example.giris.drdroid.fragments.AppointmentsFragment;
+import com.example.giris.drdroid.fragments.data.AppointmentsModel;
 import com.example.giris.drdroid.libraries.LabelTextView;
 import com.rey.material.widget.Button;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class DoctorListAdapter extends RecyclerView.Adapter<DoctorListAdapter.MyViewHolder> {
+public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapter.MyViewHolder> {
 
     public static Context context;
 
-    private ArrayList<DoctorListModel> dataSet;
-    public DoctorListAdapter(ArrayList<DoctorListModel> data, Context context) {
+    private ArrayList<AppointmentsModel> dataSet;
+    public AppointmentsAdapter(ArrayList<AppointmentsModel> data, Context context) {
         this.dataSet = data;
         this.context =context;
     }
@@ -41,9 +38,9 @@ public class DoctorListAdapter extends RecyclerView.Adapter<DoctorListAdapter.My
     public MyViewHolder onCreateViewHolder(ViewGroup parent,
                                            int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.doctor_list_card, parent, false);
+                .inflate(R.layout.appointments_card, parent, false);
 
-        view.setOnClickListener(DoctorListFragment.myOnClickListener);
+        view.setOnClickListener(AppointmentsFragment.myOnClickListener);
 
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
@@ -62,7 +59,7 @@ public class DoctorListAdapter extends RecyclerView.Adapter<DoctorListAdapter.My
         name.setLabelText(dataSet.get(listPosition).rating);
         name.setLabelBackgroundColor(Color.RED);
 
-        area.setText("Area: "+dataSet.get(listPosition).area);
+        area.setText("Time: "+dataSet.get(listPosition).area);
         String secondaryText = "Address: "+dataSet.get(listPosition).address+"\n"+
                 "Specialization: "+dataSet.get(listPosition).specialization;
         addresss.setText(secondaryText);
@@ -99,22 +96,7 @@ public class DoctorListAdapter extends RecyclerView.Adapter<DoctorListAdapter.My
                 Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 //context.startActivity(new Intent(context, BookAppointmentActivity.class));
 
-                String arr[] = {"1:30-2:00", "2:30-3:00", "3:00-3:30"};
-                new MaterialDialog.Builder(context)
-                        .title("Available Slots")
-                        .items(arr)
-                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                /**
-                                 * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
-                                 * returning false here won't allow the newly selected radio button to actually be selected.
-                                 **/
-                                return true;
-                            }
-                        })
-                        .positiveText("BOOK")
-                        .show();
+                //TODO Cancel logic
             }
         }
 

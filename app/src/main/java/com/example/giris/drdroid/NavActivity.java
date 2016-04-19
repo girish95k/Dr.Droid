@@ -1,5 +1,6 @@
 package com.example.giris.drdroid;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import com.example.giris.drdroid.fragments.AboutFragment;
 import com.example.giris.drdroid.fragments.DiagnoseFragment;
 import com.example.giris.drdroid.fragments.FindDoctorsFragment;
+import com.example.giris.drdroid.fragments.PrescriptionsFragment;
+import com.example.giris.drdroid.fragments.finddoctorsfragments.doctorlistfragments.MapsActivity;
 
 
 public class NavActivity extends AppCompatActivity
@@ -32,6 +35,8 @@ public class NavActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Main Menu");
+
+        //startActivity(new Intent(this, MapsActivity.class));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,7 +96,11 @@ public class NavActivity extends AppCompatActivity
             fragment = new DiagnoseFragment();
             setTitle("Diagnose");
 
-        } else if (id == R.id.nav_about) {
+        } else if (id == R.id.nav_prescriptions) {
+            fragment = new PrescriptionsFragment();
+            setTitle("Prescriptions");
+
+        }else if (id == R.id.nav_about) {
             fragment = new AboutFragment();
             setTitle("About");
 

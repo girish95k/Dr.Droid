@@ -1,11 +1,10 @@
 package com.example.giris.drdroid.fragments.diagnosefragments;
 
-import android.app.ProgressDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,13 +13,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.giris.drdroid.R;
+import com.example.giris.drdroid.dummy.DummyContent;
 import com.example.giris.drdroid.fragments.diagnosefragments.adapters.ShowDoctorsAdapter;
 import com.example.giris.drdroid.fragments.diagnosefragments.data.ShowDoctorsModel;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,10 +82,55 @@ public class ShowDoctorsFragment extends Fragment {
 
         data = new ArrayList<ShowDoctorsModel>();
 
+        SharedPreferences prefs = getActivity().getSharedPreferences("URL", getActivity().MODE_PRIVATE);
+        String url = prefs.getString("URL", "nat");
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        String symptoms = "";
+        for(int i = 0; i<DummyContent.ITEMS.size(); i++)
+        {
+            symptoms+=DummyContent.ITEMS.get(i).content;
+            symptoms+=":";
+        }
+
+        Log.e("symptoms", symptoms);
+        params.put("Symptoms", symptoms);
+        client.get(url + "/diagnose", params, new AsyncHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                Log.e("docs", new String(response));
+                try {
+                    JSONObject json = new JSONObject(new String(response));
+                    JSONArray data2 = json.getJSONArray("data");
+                    int i;
+                    for(i=0; i<data2.length(); i++){
+                        JSONObject obj = data2.getJSONObject(i);
+                        String name = obj.getString("FirstName")+" "+obj.getString("LastName");
+                        String area = obj.getString("Place");
+                        String city = obj.getString("City");
+                        String special = obj.getString("Specialization");
+                        String rating = obj.getString("Rating");
+                        data.add(new ShowDoctorsModel(name, area, city, rating, special));
+                    }
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                Log.e("Diagnose DOCTOR", e.toString());
+            }
+        });
+
+        /*
         data.add(new ShowDoctorsModel("Harish", "WhiteField", "Near Form Value Mall", "3.5", "Heart"));
         data.add(new ShowDoctorsModel("Ram Mohan Shenoy", "AECS Layout", "Near CMRIT", "4.5", "Heart"));
         data.add(new ShowDoctorsModel("Jagan Shankar Reddy", "Mahadevapura", "Near Phoenix Mall", "3.0", "Heart"));
         data.add(new ShowDoctorsModel("Shyam Ashok Dellwala", "Garudacharpalya", "Near Brigade Metropolis", "4.5", "Heart"));
+        */
         adapter = new ShowDoctorsAdapter(data);
         recyclerView.setAdapter(adapter);
 

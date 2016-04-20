@@ -1,14 +1,13 @@
-package com.example.giris.drdroid.libraries;
+package com.example.giris.drdroid;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
-import com.example.giris.drdroid.R;
+import android.widget.Toast;
 
 public class URLActivity extends AppCompatActivity {
 
@@ -25,6 +24,9 @@ public class URLActivity extends AppCompatActivity {
     public void clickMeLikeThat(View view){
         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.putString("URL",editText.getText().toString());
+        editor.apply();
+        Toast.makeText(this,"URL updated",Toast.LENGTH_SHORT);
+        finish();
     }
 
     @Override

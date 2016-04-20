@@ -23,4 +23,10 @@
     <string name="title_activity_book_appointment">BookAppointmentActivity</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_url">URLActivity</string>
+
+    <string name="default_text_ps">3</string>
+    <string name="separator">/</string>
+    <string name="default_text_kws">5</string>
+
+
 </resources>

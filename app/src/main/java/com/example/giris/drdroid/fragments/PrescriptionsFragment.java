@@ -1,7 +1,7 @@
 package com.example.giris.drdroid.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,16 +13,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.giris.drdroid.R;
 import com.example.giris.drdroid.fragments.adapters.PrescriptionsAdapter;
 import com.example.giris.drdroid.fragments.data.PrescriptionsModel;
-import com.example.giris.drdroid.fragments.diagnosefragments.adapters.ShowDoctorsAdapter;
-import com.example.giris.drdroid.fragments.diagnosefragments.data.ShowDoctorsModel;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,10 +81,41 @@ public class PrescriptionsFragment extends Fragment {
 
         data = new ArrayList<PrescriptionsModel>();
 
-        data.add(new PrescriptionsModel("Harish", "10th January 2016", "10110123", "Crocin - 30\nHifenac - 10"));
-        data.add(new PrescriptionsModel("Ram Mohan Shenoy", "14th February 2016", "10112231", "Amox 500 - 20"));
-        data.add(new PrescriptionsModel("Jagan Shankar Reddy", "4th March 2016", "10112256", "Benadryl - 1\nColdarin - 7"));
-        data.add(new PrescriptionsModel("Shyam Ashok Dellwala", "7th April 2016", "10114543", "Interferon - 30"));
+        SharedPreferences prefs = getActivity().getSharedPreferences("URL", getActivity().MODE_PRIVATE);
+        String url = prefs.getString("URL", "nat");
+
+        SharedPreferences prefs2 = getActivity().getSharedPreferences(MY_PREFS_NAME, getActivity().MODE_PRIVATE);
+        String userid = prefs.getString("userid", "104");
+
+        RequestParams params = new RequestParams();
+        params.put("userid", userid);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(url + "/prescribe", params, new AsyncHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                try {
+                    JSONObject json = new JSONObject(new String(response));
+                    JSONArray data2 = json.getJSONArray("data");
+                    int i;
+                    for (i = 0; i < data2.length(); i++) {
+                        JSONObject obj = data2.getJSONObject(i);
+                        String name = obj.getString("doctor");
+                        String date = obj.getString("date");
+                        String link = obj.getString("link");
+                        String id = obj.getString("id");
+                        data.add(new PrescriptionsModel(name, date, id, link));
+                    }
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.e("Prescriptions", error.toString());
+            }
+        });
         adapter = new PrescriptionsAdapter(data);
         recyclerView.setAdapter(adapter);
 
@@ -115,7 +151,7 @@ public class PrescriptionsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private static class MyOnClickListener implements View.OnClickListener {
+    private class MyOnClickListener implements View.OnClickListener {
 
         private final Context context;
 
@@ -126,16 +162,23 @@ public class PrescriptionsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             int selectedItemPosition = recyclerView.getChildLayoutPosition(v);
+            /*
             RecyclerView.ViewHolder viewHolder
                     = recyclerView.findViewHolderForLayoutPosition(selectedItemPosition);
             LinearLayout hiddenLayout
                     = (LinearLayout) viewHolder.itemView.findViewById(R.id.frame_expand);
-            if(hiddenLayout.getVisibility() == View.VISIBLE) {
+            if (hiddenLayout.getVisibility() == View.VISIBLE) {
                 hiddenLayout.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 hiddenLayout.setVisibility(View.VISIBLE);
             }
+            */
+
+            String url = data.get(selectedItemPosition).prescriptions;
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+
         }
 
     }

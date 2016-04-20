@@ -3,6 +3,7 @@ package com.example.giris.drdroid.fragments.diagnosefragments.adapters;
 /**
  * Created by giris on 27-03-2016.
  */
+
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import com.example.giris.drdroid.fragments.diagnosefragments.ShowDoctorsFragment
 import com.example.giris.drdroid.fragments.diagnosefragments.data.ShowDoctorsModel;
 import com.example.giris.drdroid.libraries.LabelTextView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ShowDoctorsAdapter extends RecyclerView.Adapter<ShowDoctorsAdapter.MyViewHolder> {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#ff0099cc</color>
+    <color name="colorPrimaryDark">#ff00719b</color>
     <color name="colorAccent">@color/cpb_blue</color>
     <color name="list_item_title">#fff</color>
     <color name="list_background">#303030</color>
@@ -20,5 +20,12 @@
     <color name="cpb_green">#ff99cc00</color>
     <color name="cpb_green_dark">#ff6d9b00</color>
     <color name="cpb_white">@android:color/white</color>
+
+    <color name="table_header_text">#CCFFFFFF</color>
+    <color name="table_data_row_even">#11C5CAE9</color>
+    <color name="table_data_row_odd">#33C5CAE9</color>
+
+    <color name="primaryDark">#ff00719b</color>
+    <color name="primary">#ff0099cc</color>
 
 </resources>

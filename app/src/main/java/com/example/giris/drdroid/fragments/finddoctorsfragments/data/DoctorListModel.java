@@ -6,6 +6,7 @@ package com.example.giris.drdroid.fragments.finddoctorsfragments.data;
 public class DoctorListModel {
 
     public String name, area, address, rating, specialization;
+    public double lat, lon;
 
     public DoctorListModel(String name, String area, String address, String rating, String specialization) {
         this.name = name;

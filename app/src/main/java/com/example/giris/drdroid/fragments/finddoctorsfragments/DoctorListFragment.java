@@ -1,6 +1,5 @@
 package com.example.giris.drdroid.fragments.finddoctorsfragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,13 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.giris.drdroid.R;
 import com.example.giris.drdroid.fragments.finddoctorsfragments.adapters.DoctorListAdapter;
 import com.example.giris.drdroid.fragments.finddoctorsfragments.data.DoctorListModel;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,13 +80,45 @@ public class DoctorListFragment extends Fragment {
 
         data = new ArrayList<DoctorListModel>();
 
+        SharedPreferences prefs = getActivity().getSharedPreferences("URL", getActivity().MODE_PRIVATE);
+        String url = prefs.getString("URL", "nat");
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(url + "/doctors",  new AsyncHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                try {
+                    JSONObject json = new JSONObject(new String(response));
+                    JSONArray data2 = json.getJSONArray("data");
+                    int i;
+                    for(i=0; i<data2.length(); i++){
+                        JSONObject obj = data2.getJSONObject(i);
+                        String name = obj.getString("FirstName")+" "+obj.getString("LastName");
+                        String area = obj.getString("Place");
+                        String city = obj.getString("City");
+                        String special = obj.getString("Specialization");
+                        String rating = obj.getString("Rating");
+                        data.add(new DoctorListModel(name, area, city, rating, special));
+                    }
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                Log.e("DOCTOR", e.toString());
+            }
+        });
+
+/*
         data.add(new DoctorListModel("Phalachandra", "WhiteField", "Near Form Value Mall", "5.0", "Skin"));
         data.add(new DoctorListModel("Kempegowda", "B Narayanapura", "Near B Narayanapura Bus Stop", "2.5", "Ortho"));
         data.add(new DoctorListModel("Harish", "WhiteField", "Near Form Value Mall", "3.5", "Heart"));
         data.add(new DoctorListModel("Ram Mohan Shenoy", "AECS Layout", "Near CMRIT", "4.5", "Heart"));
         data.add(new DoctorListModel("Jagan Shankar Reddy", "Mahadevapura", "Near Phoenix Mall", "3.0", "Heart"));
         data.add(new DoctorListModel("Shyam Ashok Dellwala", "Garudacharpalya", "Near Brigade Metropolis", "4.5", "Heart"));
-        adapter = new DoctorListAdapter(data, getActivity());
+        */adapter = new DoctorListAdapter(data, getActivity());
         recyclerView.setAdapter(adapter);
 
         return rootView;

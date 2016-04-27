@@ -2,6 +2,7 @@ package com.example.giris.drdroid;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -199,9 +200,14 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                     params.put("Longitude", longitude);
 
 
+                    final ProgressDialog pDialog = new ProgressDialog(RegisterActivity.this);
+                    pDialog.setMessage("Loading...");
+                    pDialog.show();
+                    pDialog.setCancelable(true);
 
                     client.post(url + "/register", params, new AsyncHttpResponseHandler() {
                         public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                            pDialog.hide();
                             try {
                                 JSONObject json = new JSONObject(new String(response));
                                 editor.putString("userid", json.getString("userid"));
@@ -215,6 +221,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                            pDialog.hide();
                             Log.e("REGISTER", e.toString());
                         }
                     });

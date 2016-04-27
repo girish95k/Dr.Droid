@@ -1,5 +1,6 @@
 package com.example.giris.drdroid.fragments.finddoctorsfragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -83,21 +84,29 @@ public class DoctorListFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences("URL", getActivity().MODE_PRIVATE);
         String url = prefs.getString("URL", "nat");
 
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        pDialog.setCancelable(true);
+
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(url + "/doctors",  new AsyncHttpResponseHandler() {
+        client.get(url + "/doctors", new AsyncHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                pDialog.hide();
                 try {
                     JSONObject json = new JSONObject(new String(response));
                     JSONArray data2 = json.getJSONArray("data");
                     int i;
-                    for(i=0; i<data2.length(); i++){
+                    for (i = 0; i < data2.length(); i++) {
                         JSONObject obj = data2.getJSONObject(i);
-                        String name = obj.getString("FirstName")+" "+obj.getString("LastName");
+                        String name = obj.getString("FirstName") + " " + obj.getString("LastName");
                         String area = obj.getString("Place");
                         String city = obj.getString("City");
                         String special = obj.getString("Specialization");
                         String rating = obj.getString("Rating");
-                        data.add(new DoctorListModel(name, area, city, rating, special));
+                        String docid = obj.getString("Doc_id");
+
+                        data.add(new DoctorListModel(name, area, city, rating.substring(0, 3), special, docid));
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -107,6 +116,7 @@ public class DoctorListFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                pDialog.hide();
                 Log.e("DOCTOR", e.toString());
             }
         });

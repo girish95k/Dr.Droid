@@ -1,5 +1,6 @@
 package com.example.giris.drdroid;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -59,9 +60,15 @@ public class LoginActivity extends AppCompatActivity {
                 params.put("Email", ""+email.getText().toString());
                 params.put("Password", password.getText().toString());
 
+                final ProgressDialog pDialog = new ProgressDialog(LoginActivity.this);
+                pDialog.setMessage("Loading...");
+                pDialog.show();
+                pDialog.setCancelable(true);
+
 
                 client.post(url + "/login", params, new AsyncHttpResponseHandler() {
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                        pDialog.hide();
                         try {
                             JSONObject json = new JSONObject(new String(response));
                             if (json.getString("exists").equals("1")) {
@@ -81,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                        pDialog.hide();
                         Log.e("LOGIN", e.toString());
                     }
                 });

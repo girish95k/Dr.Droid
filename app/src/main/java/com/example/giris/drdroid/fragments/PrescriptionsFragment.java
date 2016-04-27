@@ -1,5 +1,6 @@
 package com.example.giris.drdroid.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -90,9 +91,15 @@ public class PrescriptionsFragment extends Fragment {
         RequestParams params = new RequestParams();
         params.put("userid", userid);
 
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        pDialog.setCancelable(true);
+
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url + "/prescribe", params, new AsyncHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                pDialog.hide();
                 try {
                     JSONObject json = new JSONObject(new String(response));
                     JSONArray data2 = json.getJSONArray("data");
@@ -113,6 +120,7 @@ public class PrescriptionsFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                pDialog.hide();
                 Log.e("Prescriptions", error.toString());
             }
         });

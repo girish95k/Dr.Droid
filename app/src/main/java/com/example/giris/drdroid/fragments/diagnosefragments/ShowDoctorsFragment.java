@@ -1,6 +1,7 @@
 package com.example.giris.drdroid.fragments.diagnosefragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -97,8 +98,15 @@ public class ShowDoctorsFragment extends Fragment {
 
         Log.e("symptoms", symptoms);
         params.put("Symptoms", symptoms);
+
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        pDialog.setCancelable(true);
+
         client.get(url + "/diagnose", params, new AsyncHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                pDialog.hide();
                 Log.e("docs", new String(response));
                 try {
                     JSONObject json = new JSONObject(new String(response));
@@ -111,7 +119,7 @@ public class ShowDoctorsFragment extends Fragment {
                         String city = obj.getString("City");
                         String special = obj.getString("Specialization");
                         String rating = obj.getString("Rating");
-                        data.add(new ShowDoctorsModel(name, area, city, rating, special));
+                        data.add(new ShowDoctorsModel(name, area, city, rating.substring(0, 3), special));
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -121,6 +129,7 @@ public class ShowDoctorsFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                pDialog.hide();
                 Log.e("Diagnose DOCTOR", e.toString());
             }
         });
